@@ -7,32 +7,6 @@ export const initilalState = {
     loginData: {},
 };
 
-// async action creator -> redux saga(강좌4)
-
-// redux-thunk를 이용한 비동기요청샘플 4강00:20
-export const loginAction = (data) => {
-    return (dispatch, getState) => {
-        const state = getState();
-        console.log('state', state);
-        setTimeout(() => {
-            dispatch(loginRequestAction());
-        }, 2000);
-        // dispatch(loginRequestAction());
-        axios.post('/api/login')
-            .then((res) => {
-                dispatch(loginSuccessAction(res.data));
-            })
-            .catch((err) => {
-                dispatch(loginFailureAction(err));
-            })
-    };
-}
-export const logoutAction = (data) => {
-    return {
-        type: 'LOG_OUT_REQUEST',
-    };
-}
-
 //action creator
 export const loginRequestAction = (data) => {
     return {

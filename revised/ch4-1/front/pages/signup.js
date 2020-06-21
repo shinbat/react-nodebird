@@ -40,7 +40,7 @@ const Signup = () => {
                 Router.push('/');
             };
         } else {
-            signUpDone.current = true;
+            signUpDone.current = true;;;
         }
     }, [signUpLoading, signUpDone]);
 
@@ -66,9 +66,9 @@ const Signup = () => {
             </Head>
             <Form onFinish={onsubmit}>
                 <div>
-                    <label htmlFor="user-id">이메일</label>
+                    <label htmlFor="user-email">이메일</label>
                     <br/>
-                    <Input name="user-id" type="email" value={email} required onChange={onChangeEmail} />
+                    <Input name="user-email" type="email" value={email} required onChange={onChangeEmail} />
                 </div>
                 <div>
                     <label htmlFor="user-nick">닉네임</label>

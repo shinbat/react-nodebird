@@ -31,14 +31,14 @@ const LoginForm = ({ setIsLoggedIn }) => {
     // }, []);
 
 
-    const onFinishForm = useCallback(() => {
+    const onSubmitForm = useCallback(() => {
         console.log(email, password);
         // setIsLoggedIn(true);
         dispatch(loginRequestAction({email, password}));
     }, [email, password]); 
 
     return (
-        <FormWrapper onFinish={onFinishForm}>
+        <FormWrapper onFinish={onSubmitForm}>
             <div>
                 <label htmlFor="user-email">이메일</label>
                 <br/>

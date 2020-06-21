@@ -14,7 +14,7 @@ function* logIn(action) {
     try {
         console.log('saga logIn');
          // const result = yield call(loginAPI, action.data); 
-        yield delay(2000);
+        yield delay(1000);
         yield put({
             type: LOG_IN_SUCCESS,
             data: action.data,
@@ -55,7 +55,7 @@ function* signUp(action) {
     try {
         console.log('saga signUp');
          // const result = yield call(signUpAPI, action.data); 
-        yield delay(2000);
+        yield delay(1000);
         yield put({
             type: SIGN_UP_SUCCESS,
             data: action.data,

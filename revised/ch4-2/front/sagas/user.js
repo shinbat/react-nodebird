@@ -1,4 +1,4 @@
-import axiox from 'axios';
+import axios from 'axios';
 import { all, fork, call, put, take, takeLatest, delay, } from 'redux-saga/effects';
 import { 
     FOLLOW_REQUEST, FOLLOW_SUCCESS, FOLLOW_FAILURE,
@@ -24,7 +24,7 @@ function* follow(action) {
     } catch (err) {
         yield put({
             type: FOLLOW_FAILURE,
-            error: err.resopnse.data,     
+            error: err.response.data,     
         });
     }; 
 };
@@ -45,40 +45,37 @@ function* unfollow(action) {
     } catch (err) {
         yield put({
             type: UNFOLLOW_FAILURE,
-            error: err.resopnse.data,     
+            error: err.response.data,     
         });
     }; 
 };
 
 function logInAPI(data) {
-    return axios.post('/api/logIn', data);
+    return axios.post('/user/logIn', data);
 }
 
 function* logIn(action) {
     try {
-        console.log('saga logIn');
-         // const result = yield call(loginAPI, action.data); 
-        yield delay(1000);
+        const result = yield call(logInAPI, action.data); 
         yield put({
             type: LOG_IN_SUCCESS,
-            data: action.data,
+            data: result.data,
         });   
     } catch (err) {
         yield put({
             type: LOG_IN_FAILURE,
-            error: err.resopnse.data,     
+            error: err.response.data,     
         });
     }; 
 };
 
-function logOutAPI(data) {
-    return axios.post('/api/logout', data);
+function logOutAPI() {
+    return axios.post('/user/logout');
 }
 
 function* logOut(action) {
     try {
-        console.log('saga logOut');
-         // const result = yield call(loginAPI, action.data); 
+        const result = yield call(logOutAPI); 
         yield delay(1000);
         yield put({
             type: LOG_OUT_SUCCESS,
@@ -86,20 +83,19 @@ function* logOut(action) {
     } catch (err) {
         yield put({
             type: LOG_OUT_FAILURE,
-            error: err.resopnse.data,     
+            error: err.response.data,     
         });
     }; 
 };
 
 function signUpAPI(data) {
-    return axios.post('/api/signUp', data);
-}
+    return axios.post('/user', data);
+};
 
 function* signUp(action) {
     try {
-        console.log('saga signUp');
-         // const result = yield call(signUpAPI, action.data); 
-        yield delay(1000);
+        const result = yield call(signUpAPI, action.data); 
+        console.log('saga signUp', result);
         yield put({
             type: SIGN_UP_SUCCESS,
             data: action.data,
@@ -107,7 +103,7 @@ function* signUp(action) {
     } catch (err) {
         yield put({
             type: SIGN_UP_FAILURE,
-            error: err.resopnse.data,     
+            error: err.response.data,     
         });
     }; 
 };

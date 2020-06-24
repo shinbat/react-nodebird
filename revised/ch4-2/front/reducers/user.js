@@ -147,7 +147,7 @@ const reducer = (state = initilalState, action) => {
             case LOG_IN_SUCCESS:
                 draft.logInLoading = false;
                 draft.logInDone = true;
-                draft.me = dummyUser(action.data);
+                draft.me = action.data;
                 break;
                 // return {
                 //     ...state,
@@ -157,7 +157,7 @@ const reducer = (state = initilalState, action) => {
                 //     me: dummyUser(action.data),
                 // };
             case LOG_IN_FAILURE:
-                draft.logInLoading = true;
+                draft.logInLoading = false;
                 draft.logInError = action.error;
                 break;
                 // return {
@@ -177,7 +177,7 @@ const reducer = (state = initilalState, action) => {
                 //     logOutError: null,
                 // };
             case LOG_OUT_SUCCESS:
-                draft.logOutLoading = true;
+                draft.logOutLoading = false;
                 draft.logOutDone = false;
                 draft.me = null;
                 break;
@@ -188,7 +188,7 @@ const reducer = (state = initilalState, action) => {
                 //     me: null,
                 // };
             case LOG_OUT_FAILURE:
-                draft.logOutLoading = true;
+                draft.logOutLoading = false;
                 draft.logOutError = action.error;
                 break;
                 // return {
@@ -218,7 +218,7 @@ const reducer = (state = initilalState, action) => {
                 // };
             case SIGN_UP_FAILURE:
                 draft.signUpLoading = false;
-                draft.signUpError = action.data;
+                draft.signUpError = action.error;
                 break;
                 // return {
                 //     ...state,

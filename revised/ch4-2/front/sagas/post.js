@@ -1,4 +1,4 @@
-import axiox from 'axios';
+import axios from 'axios';
 import shortId from 'shortid';
 import { all, fork, call, put, take, takeLatest, delay, throttle, } from 'redux-saga/effects';
 
@@ -33,7 +33,7 @@ function* loadPosts(action) {
     } catch (err) {
         yield put({
             type: LOAD_POSTS_FAILURE,
-            error: err.resopnse.data,     
+            error: err.response.data,     
         });
     }; 
 };
@@ -56,7 +56,7 @@ function* addPost(action) {
     } catch (err) {
         yield put({
             type: ADD_POST_FAILURE,
-            error: err.resopnse.data,     
+            error: err.response.data,     
         });
     }; 
 };
@@ -76,7 +76,7 @@ function* removePost(action) {
         console.log(err);
         yield put({
             type: REMOVE_POST_FAILURE,
-            error: err.resopnse.data,     
+            error: err.response.data,     
         });
     }; 
 };
@@ -91,7 +91,7 @@ function* addComment(action) {
     } catch (err) {
         yield put({
             type: ADD_COMMENT_FAILURE,
-            error: err.resopnse.data,     
+            error: err.response.data,     
         });
     }; 
 };

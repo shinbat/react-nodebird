@@ -22,7 +22,7 @@ function* logIn(action) {
     } catch (err) {
         yield put({
             type: LOG_IN_FAILURE,
-            error: err.resopnse.data,     
+            error: err.response.data,     
         });
     }; 
 };
@@ -42,7 +42,7 @@ function* logOut(action) {
     } catch (err) {
         yield put({
             type: LOG_OUT_FAILURE,
-            error: err.resopnse.data,     
+            error: err.response.data,     
         });
     }; 
 };
@@ -63,7 +63,7 @@ function* signUp(action) {
     } catch (err) {
         yield put({
             type: SIGN_UP_FAILURE,
-            error: err.resopnse.data,     
+            error: err.response.data,     
         });
     }; 
 };

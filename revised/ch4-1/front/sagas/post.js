@@ -37,7 +37,7 @@ function* addPost(action) {
     } catch (err) {
         yield put({
             type: ADD_POST_FAILURE,
-            error: err.resopnse.data,     
+            error: err.response.data,     
         });
     }; 
 };
@@ -57,7 +57,7 @@ function* removePost(action) {
         console.log(err);
         yield put({
             type: REMOVE_POST_FAILURE,
-            error: err.resopnse.data,     
+            error: err.response.data,     
         });
     }; 
 };
@@ -72,7 +72,7 @@ function* addComment(action) {
     } catch (err) {
         yield put({
             type: ADD_COMMENT_FAILURE,
-            error: err.resopnse.data,     
+            error: err.response.data,     
         });
     }; 
 };

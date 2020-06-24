@@ -17,7 +17,7 @@ function* logIn(action) {
     } catch (err) {
         yield put({
             type: 'LOG_IN_FAILURE',
-            data: err.resopnse.data,     
+            data: err.response.data,     
         });
     }; 
 };
@@ -37,7 +37,7 @@ function* logOut(action) {
     } catch (err) {
         yield put({
             type: 'LOG_OUT_FAILURE',
-            data: err.resopnse.data,     
+            data: err.response.data,     
         });
     }; 
 };

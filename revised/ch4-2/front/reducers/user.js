@@ -1,6 +1,9 @@
 import produce from "immer";
 
 export const initilalState = {
+    loadUserLoading: false,
+    loadUserDone: false,
+    loadUserError: null,
     followLoading: false,
     followDone: false,
     followError: null,
@@ -25,13 +28,13 @@ export const initilalState = {
     signUpData: {},
 };
 
-export const LOG_IN_REQUEST = 'LOG_IN_REQUEST'; // 액션의 이름
-export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS'; // 액션의 이름
-export const LOG_IN_FAILURE = 'LOG_IN_FAILURE'; // 액션의 이름
+export const LOAD_USER_REQUEST = 'LOAD_USER_REQUEST';
+export const LOAD_USER_SUCCESS = 'LOAD_USER_SUCCESS';
+export const LOAD_USER_FAILURE = 'LOAD_USER_FAILURE';
 
-// export const LOAD_USER_REQUEST = 'LOAD_USER_REQUEST';
-// export const LOAD_USER_SUCCESS = 'LOAD_USER_SUCCESS';
-// export const LOAD_USER_FAILURE = 'LOAD_USER_FAILURE';
+export const LOG_IN_REQUEST = 'LOG_IN_REQUEST'; 
+export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS'; 
+export const LOG_IN_FAILURE = 'LOG_IN_FAILURE'; 
 
 export const LOG_OUT_REQUEST = 'LOG_OUT_REQUEST';
 export const LOG_OUT_SUCCESS = 'LOG_OUT_SUCCESS';
@@ -105,6 +108,20 @@ export const logoutRequestAction = () => {
 const reducer = (state = initilalState, action) => {
     return produce(state, (draft) => {
         switch (action.type) {
+            case LOAD_USER_REQUEST:
+                draft.loadUserLoading = true;
+                draft.loadUserDone = false;
+                draft.loadUserError = null;
+                break;
+            case LOAD_USER_SUCCESS:
+                draft.loadUserLoading = false;
+                draft.loadUserDone = true;
+                draft.me = action.data;
+                break;
+            case LOAD_USER_FAILURE:
+                draft.loadUserLoading = false;
+                draft.loadUserError = action.error;
+                break;
             case FOLLOW_REQUEST:
                 draft.followLoading = true;
                 draft.followDone = false;
@@ -116,7 +133,7 @@ const reducer = (state = initilalState, action) => {
                 draft.me.Followings.push({ id: action.data });
                 break;
             case FOLLOW_FAILURE:
-                draft.followLoading = true;
+                draft.followLoading = false;
                 draft.followError = action.error;
                 break;
             case UNFOLLOW_REQUEST:
@@ -130,7 +147,7 @@ const reducer = (state = initilalState, action) => {
                 draft.me.Followings = draft.me.Followings.filter((v) => v.id !== action.data);
                 break;
             case UNFOLLOW_FAILURE:
-                draft.unfollowLoading = true;
+                draft.unfollowLoading = false;
                 draft.unfollowError = action.error;
                 break;
             case LOG_IN_REQUEST:

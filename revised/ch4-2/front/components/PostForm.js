@@ -18,7 +18,7 @@ const PostForm = () => {
     //     setText(e.target.value);
     // }, []);
     const onSubmit = useCallback(() => {
-        console.log('text', text);
+        // console.log('text', text);
         dispatch(addPost(text));
     }, [text]);
 

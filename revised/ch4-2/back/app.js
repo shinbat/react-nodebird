@@ -20,8 +20,8 @@ db.sequelize.sync()
 passportConfig();
 
 app.use(cors({
-    origin: '*',
-    // credentials: false,
+    origin: 'http://localhost:3060',
+    credentials: true,  // 5-2.00:30    다른domain간 cookie전달
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
@@ -53,6 +53,11 @@ app.get('/api/posts', (req, res) => {
 
 app.use('/user', userRouter);
 app.use('/post', postRouter);
+
+// 5-2.00:10
+// app.use((err, req, res, next) => {
+
+// });
 
 app.listen(3065, () => {
     console.log('서버 실행중~~');

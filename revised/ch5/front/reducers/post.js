@@ -78,12 +78,13 @@ const reducer = (state = initilalState, action) => {
                 draft.likePostDone = false;
                 draft.likePostError = null;
                 break;
-            case LIKE_POST_SUCCESS:
+            case LIKE_POST_SUCCESS: {
                 const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
                 post.Likers.push({ id: action.data.UserId });
                 draft.likePostLoading = false;
                 draft.likePostDone = true;
                 break;
+            }
             case LIKE_POST_FAILURE:
                 draft.likePostLoading = false;
                 draft.likePostError = action.data;
@@ -164,7 +165,7 @@ const reducer = (state = initilalState, action) => {
             case REMOVE_POST_SUCCESS:
                 draft.removePostLoading = false;
                 draft.removePostDone = true;
-                draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data);      // 4-2.02:40
+                draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data.PostId);     
                 break;
                 // return {
                 //     ...state,

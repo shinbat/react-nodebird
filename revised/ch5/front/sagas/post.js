@@ -2,6 +2,7 @@ import axios from 'axios';
 import { all, fork, call, put, take, takeLatest, delay, throttle, } from 'redux-saga/effects';
 
 import { 
+        UPLOAD_IMAGES_REQUEST, UPLOAD_IMAGES_SUCCESS, UPLOAD_IMAGES_FAILURE, 
         LIKE_POST_REQUEST, LIKE_POST_SUCCESS, LIKE_POST_FAILURE, 
         UNLIKE_POST_REQUEST, UNLIKE_POST_SUCCESS, UNLIKE_POST_FAILURE, 
         LOAD_POSTS_REQUEST, LOAD_POSTS_SUCCESS, LOAD_POSTS_FAILURE, 
@@ -12,6 +13,9 @@ import {
 
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
 
+function uploadImagesAPI(data) {
+    return axios.post('/post/images', data);
+}
 function likePostAPI(data) {
     return axios.patch(`/post/${data}/like`);
 }
@@ -22,7 +26,7 @@ function loadPostsAPI(data) {
     return axios.get('/posts', data);
 }
 function addPostAPI(data) {
-    return axios.post('/post', { content: data });
+    return axios.post('/post', data);
 }
 function removePostAPI(data) {
     return axios.delete(`/post/${data}`);
@@ -31,6 +35,20 @@ function addCommentAPI(data) {
     return axios.post(`/post/${data.postId}/comment`, data);    // POST /post/1/comment
 }
 
+function* uploadImages(action) {
+    try {
+        const result = yield call(uploadImagesAPI, action.data); 
+        yield put({
+            type:UPLOAD_IMAGES_SUCCESS,
+            data: result.data,
+        });   
+    } catch (err) {
+        yield put({
+            type: UPLOAD_IMAGES_FAILURE,
+            error: err.response.data,     
+        });
+    }; 
+};
 function* likePost(action) {
     try {
         const result = yield call(likePostAPI, action.data); 
@@ -126,6 +144,9 @@ function* addComment(action) {
     }; 
 };
 
+function* watchUploadImages() {
+    yield takeLatest(UPLOAD_IMAGES_REQUEST, uploadImages);
+}
 function* watchLikePost() {
     yield takeLatest(LIKE_POST_REQUEST, likePost);
 }
@@ -147,6 +168,7 @@ function* watchAddComment() {
 
 export default function* postSaga() {
     yield all([
+        fork(watchUploadImages),
         fork(watchLikePost),
         fork(watchUnlikePost),
         fork(watchLoadPosts),

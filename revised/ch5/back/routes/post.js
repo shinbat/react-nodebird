@@ -138,9 +138,13 @@ router.post('/:postId/retweet', isLoggedIn, async (req, res, next) => {      // 
                     model: User,
                     attributes: ['id', 'nickname'],
                 }]
+            },  {
+                model: User,    // 좋아요 누른사람
+                as: 'Likers',
+                attributes: ['id'],
             }]
         });
-        res.status(201).json(retweetTargetId);
+        res.status(201).json(retweetWithPrevPost);
     } catch (error) {
         console.log(error);
         next(error);

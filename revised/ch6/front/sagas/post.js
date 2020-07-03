@@ -30,7 +30,7 @@ function unlikePostAPI(data) {
     return axios.delete(`/post/${data}/like`);
 }
 function loadUserPostsAPI(data, lastId) {
-    return axios.get(`/user/${data}/posts?lastId=${lastId}`);
+    return axios.get(`/user/${data}/posts?lastId=${lastId || 0}`);
 }
 function loadHashtagPostsAPI(data, lastId) {
     return axios.get(`/hashtag/${encodeURIComponent(data)}?lastId=${lastId}`);

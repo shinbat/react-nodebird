@@ -13,7 +13,14 @@ import wrapper from '../store/configureStore';
 const Home = () => {
     const dispatch = useDispatch();
     const { me } = useSelector((state) => state.user);
-    const { mainPosts, hasMorePosts, loadPostsLoading, retweetError } = useSelector((state) => state.post);
+    const { mainPosts, hasMorePosts, loadPostsLoading, retweetError, removePostError } = useSelector((state) => state.post);
+
+    // 5-24.20
+    useEffect(() => {
+        if (removePostError) {
+            alert(removePostError);
+        };
+    }, [removePostError]) ;
 
     useEffect(() => {
         if (retweetError) {

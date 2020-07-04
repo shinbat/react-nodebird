@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { Card, Popover, Button, Avatar, List, Comment } from 'antd';
@@ -10,13 +10,13 @@ import PostImages from './PostImages';
 import CommentForm from './CommemtForm';
 import PostCardContent from './PostCardContent';
 import FollowButton from './FollowButton';
-import { REMOVE_POST_REQUEST, LIKE_POST_REQUEST, UNLIKE_POST_REQUEST, RETWEET_REQUEST } from '../reducers/post';
+import { REMOVE_POST_REQUEST, UPDATE_POST_REQUEST, LIKE_POST_REQUEST, UNLIKE_POST_REQUEST, RETWEET_REQUEST } from '../reducers/post';
 
 moment.locale('ko');
 
 const PostCard = ({ post }) => {
     const dispatch = useDispatch();
-    const { removePostLoading } = useSelector((state) => state.post);
+    const { removePostLoading, updatePostLoading } = useSelector((state) => state.post);
     const [commentFormOpened, setCommentFormOpened] = useState(false);
 
     const id = useSelector((state) => state.user.me?.id);
@@ -54,6 +54,15 @@ const PostCard = ({ post }) => {
             data: post.id,
         });
     }, [id]);
+    const onUpdatePost = useCallback(() => {
+        if (!id) {
+            return alert('로그인이 필요합니다.');
+        }
+        return dispatch({
+            type: UPDATE_POST_REQUEST,
+            data: post.id,
+        });
+    }, [id]);
     const onRetweet = useCallback(() => {
         if (!id) {
             return alert('로그인이 필요합니다.');
@@ -80,7 +89,7 @@ const PostCard = ({ post }) => {
                                 {id && post.User.id === id 
                                 ? ( 
                                     <>
-                                        <Button>수정</Button>
+                                        <Button loading={updatePostLoading} onClick={onUpdatePost}>수정</Button>
                                         <Button type="danger" loading={removePostLoading} onClick={onRemovePost}>삭제</Button>
                                     </>
                                 ) : <Button>신고</Button>}
@@ -98,7 +107,7 @@ const PostCard = ({ post }) => {
                         <Card
                             cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.Images} />}
                         >
-                            <div style={{ float: 'right'}} >{moment(post.createdAt).format('YYYY.MM.DD')}</div>
+                            <div style={{ float: 'right'}} >[{post.id}] {moment(post.createdAt).format('YYYY.MM.DD')}</div>
                             <Card.Meta 
                                 avatar={(
                                     <Link href={`/user/${post.Retweet.User.id}`}>
@@ -112,7 +121,7 @@ const PostCard = ({ post }) => {
                     )
                     : (
                         <>
-                            <div style={{ float: 'right'}} >{moment(post.createdAt).format('YYYY.MM.DD')}</div>
+                            <div style={{ float: 'right'}} >[{post.id}] {moment(post.createdAt).format('YYYY.MM.DD')}</div>
                             <Card.Meta 
                                 avatar={(
                                     <Link href={`/user/${post.User.id}`}>

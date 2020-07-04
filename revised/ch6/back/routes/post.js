@@ -259,6 +259,24 @@ router.delete('/:postId/like', isLoggedIn, async (req, res, next) => {
 
 router.delete('/:postId', isLoggedIn, async (req, res, next) => {
     try {
+        const post = await Post.findOne({
+            where: { id: req.params.postId },
+        });
+        const retweet = await Post.findOne({
+            where: { 
+                RetweetId: req.params.postId,
+                content: 'retweet',
+            },
+        })
+        if (!post) {
+            return res.status(403).send('존재하지 않는 게시글입니다.');
+        };
+        if (req.user.id !== post.UserId) {
+            return res.status(403).send('타인의 글은 삭제할 수 없습니다.');
+        }
+        if (retweet) {
+            return res.status(403).send('리트윗된 글은 삭제할 수 없습니다.');
+        }
         await Post.destroy({
             where : { 
                 id: req.params.postId,
@@ -266,6 +284,23 @@ router.delete('/:postId', isLoggedIn, async (req, res, next) => {
              },
         });
         res.status(200).json({ PostId: parseInt(req.params.postId, 10) });
+    } catch (error) {
+        console.error(error);
+        next(error);
+    }    
+});
+
+router.post('/:postId', isLoggedIn, async (req, res, next) => {
+    try {
+        await Post.update({
+            content: req.body.content,    
+        },{
+            where : { 
+                id: req.params.postId,
+                UserId: req.user.id,
+             },
+        });
+        res.status(200).json({ content: req.body.content });
     } catch (error) {
         console.error(error);
         next(error);

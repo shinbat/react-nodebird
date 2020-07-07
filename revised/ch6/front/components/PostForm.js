@@ -1,5 +1,6 @@
 import React, { useCallback, useState, useRef, useEffect } from "react";
 import { Form, Input, Button } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 import { useSelector, useDispatch } from "react-redux";
 import { ADD_POST_REQUEST, UPLOAD_IMAGES_REQUEST, REMOVE_IMAGE } from "../reducers/post";
 import useInput from "../hooks/useInput";
@@ -64,7 +65,7 @@ const PostForm = () => {
             />
             <div>
                 <input type="file" name="image" multiple hidden ref={imageInput} onChange={onChangeImages} />
-                <Button onClick={onClickImageUpload}>이미지 업로드</Button>
+                <Button onClick={onClickImageUpload}><UploadOutlined />이미지 업로드</Button>
                 <Button type="primary" style={{ float: 'right '}} htmlType="submit" loading={addPostLoading}>짹짹</Button>
             </div>
             <div>

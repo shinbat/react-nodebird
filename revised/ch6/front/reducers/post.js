@@ -1,5 +1,4 @@
-import shortId from 'shortid';
-import produce from 'immer';
+import produce from '../util/produce';
 
 export const initilalState = {
     mainPosts: [],

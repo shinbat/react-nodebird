@@ -2,10 +2,14 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const nodemailer = require('nodemailer');
 
 const { Post, Comment, Image, User, Hashtag, Report } = require('../models');
 const { isLoggedIn } = require('./middlewares');
+const { POINT_CONVERSION_COMPRESSED } = require('constants');
+const { getMaxListeners } = require('process');
 
+const prod = process.env.NODE_ENV === 'production';
 const router = express.Router();
 
 try {
@@ -245,7 +249,29 @@ router.post('/:postId/report', isLoggedIn, async (req, res, next) => {      // P
             content: req.body.content,
             PostId: parseInt(req.params.postId, 10),
             UserId: req.user.id,
-        });        
+        });  
+        const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,
+            auth: {
+                user: 'shinbat6@gmail.com',
+                pass: process.env.MAIL_PASSWORD,
+            },
+        });
+        await transporter.verify();
+        await transporter.sendMail({
+            from: '"NodeBird 신고내역" <shinbat6@gmail.com>',
+            to: '"NodeBird 관리자" <shinbat6@gmail.com>',
+            subject: 'NodeBird 신고발생',
+            html: `
+                <div>
+                    <a href="${prod ? 'https://nodebird.com' : 'http://localhost:3060'}/post/${req.params.postId}">신고가 접수되었습니다</a>
+                    <p>${req.body.content}</p>
+                </div>            
+            `,
+        });
+        console.log('Mail sent');
         res.status(201).send('ok');
     } catch (error) {
         console.log(error);

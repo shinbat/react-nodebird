@@ -3,7 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const { Post, Comment, Image, User, Hashtag } = require('../models');
+const { Post, Comment, Image, User, Hashtag, Report } = require('../models');
 const { isLoggedIn } = require('./middlewares');
 
 const router = express.Router();
@@ -219,6 +219,34 @@ router.post('/:postId/comment', isLoggedIn, async (req, res, next) => {      // 
             }],
         })
         res.status(201).json(fullComment);
+    } catch (error) {
+        console.log(error);
+        next(error);
+    }
+});
+router.post('/:postId/report', isLoggedIn, async (req, res, next) => {      // POST /post/1/comment
+    try {
+        const post = await Post.findOne({
+            where: { id: req.params.postId },
+        });
+        if (!post) {
+            return res.status(403).send('존재하지 않는 게시글입니다.');
+        };
+        const exReport = await Report.findOne({
+            where: {
+                PostId: parseInt(req.params.postId, 10),
+                UserId: req.user.id,               
+            }
+        });
+        if (exReport) {
+            return res.status(403).send('이미 신고했습니다.');
+        }
+        await Report.create({
+            content: req.body.content,
+            PostId: parseInt(req.params.postId, 10),
+            UserId: req.user.id,
+        });        
+        res.status(201).send('ok');
     } catch (error) {
         console.log(error);
         next(error);

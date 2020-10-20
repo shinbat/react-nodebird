@@ -2,6 +2,7 @@ import axios from 'axios';
 import { all, fork, call, put, take, takeLatest, delay, throttle, } from 'redux-saga/effects';
 
 import { 
+        REPORT_POST_REQUEST, REPORT_POST_SUCCESS, REPORT_POST_FAILURE, 
         RETWEET_REQUEST, RETWEET_SUCCESS, RETWEET_FAILURE, 
         UPLOAD_IMAGES_REQUEST, UPLOAD_IMAGES_SUCCESS, UPLOAD_IMAGES_FAILURE, 
         LIKE_POST_REQUEST, LIKE_POST_SUCCESS, LIKE_POST_FAILURE, 
@@ -18,6 +19,9 @@ import {
 
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
 
+function reportPostAPI(data) {
+    return axios.post(`/post/${data.postId}/report`, data);
+}
 function retweetAPI(data) {
     return axios.post(`/post/${data}/retweet`);
 }
@@ -55,6 +59,21 @@ function addCommentAPI(data) {
     return axios.post(`/post/${data.postId}/comment`, data);    // POST /post/1/comment
 }
 
+function* reportPost(action) {
+    try {
+        const result = yield call(reportPostAPI, action.data); 
+        yield put({
+            type:REPORT_POST_SUCCESS,
+            data: result.data,
+        });
+    } catch (err) {
+        console.error(err);
+        yield put({
+            type: REPORT_POST_FAILURE,
+            error: err.response.data,     
+        });
+    }; 
+};
 function* retweet(action) {
     try {
         const result = yield call(retweetAPI, action.data); 
@@ -248,6 +267,9 @@ function* addComment(action) {
     }; 
 };
 
+function* watchReportPost() {
+    yield takeLatest(REPORT_POST_REQUEST, reportPost);
+}
 function* watchRetweet() {
     yield takeLatest(RETWEET_REQUEST, retweet);
 }
@@ -285,8 +307,10 @@ function* watchAddComment() {
     yield takeLatest(ADD_COMMENT_REQUEST, addComment);
 }
 
+
 export default function* postSaga() {
     yield all([
+        fork(watchReportPost),
         fork(watchRetweet),
         fork(watchUploadImages),
         fork(watchLikePost),

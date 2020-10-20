@@ -35,6 +35,9 @@ export const initilalState = {
     retweetLoading: false,
     retweetDone: false,
     retweetError: null,
+    reportPostLoading: false,
+    reportPostDone: false,
+    reportPostError: null,
     addPostData: null,
 };
 
@@ -86,6 +89,10 @@ export const RETWEET_REQUEST = 'RETWEET_REQUEST';
 export const RETWEET_SUCCESS = 'RETWEET_SUCCESS';
 export const RETWEET_FAILURE = 'RETWEET_FAILURE';
 
+export const REPORT_POST_REQUEST = 'REPORT_POST_REQUEST';
+export const REPORT_POST_SUCCESS = 'REPORT_POST_SUCCESS';
+export const REPORT_POST_FAILURE = 'REPORT_POST_FAILURE';
+
 export const REMOVE_IMAGE = 'REMOVE_IMAGE';
 
 export const addPost = (data) => ({
@@ -111,6 +118,20 @@ const dummyComment = (data) => ({
 const reducer = (state = initilalState, action) => {
     return produce (state, (draft) => {
         switch (action.type) {
+            case REPORT_POST_REQUEST:
+                draft.reportPostLoading = true;
+                draft.reportPostDone = false;
+                draft.reportPostError = null;
+                break;
+            case REPORT_POST_SUCCESS: {
+                draft.reportPostLoading = false;
+                draft.reportPostDone = true;
+                break;
+            }
+            case REPORT_POST_FAILURE:
+                draft.reportPostLoading = false;
+                draft.reportPostError = action.error;
+                break;
             case RETWEET_REQUEST:
                 draft.retweetLoading = true;
                 draft.retweetDone = false;
